@@ -13,6 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         # ✅ Gets your repo files into the workflow machine
+      - name: Debug secrets
+        run: echo "Host is set" && echo ${{ secrets.SERVER_HOST }}
 
       - name: Connect to server and deploy
         uses: appleboy/ssh-action@v0.1.10
