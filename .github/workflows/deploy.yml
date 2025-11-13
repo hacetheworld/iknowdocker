@@ -14,7 +14,12 @@ jobs:
         uses: actions/checkout@v4
         # ✅ Gets your repo files into the workflow machine
       - name: Debug secrets
-        run: echo "Host is set " && echo ${{ secrets.SERVER_HOST }}
+        run: |
+          echo "Testing secrets..."
+          echo "SERVER_HOST is set to: ${{ secrets.SERVER_HOST }}"
+          echo "SERVER_USER is set to: ${{ secrets.SERVER_USER }}"
+          echo "SSH key length: $(echo '${{ secrets.SSH_PRIVATE_KEY }}' | wc -c)"
+        shell: bash
 
       - name: Connect to server and deploy
         uses: appleboy/ssh-action@v0.1.10
@@ -23,7 +28,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/ubuntu/mydockerproject  # your app path on the server
+            cd /home/ubuntu/iknowdocker  # your app path on the server
             git pull origin master             # pull latest code
             docker compose down              # stop old containers
             docker compose build --no-cache  # rebuild images
