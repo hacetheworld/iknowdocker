@@ -13,13 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         # ✅ Gets your repo files into the workflow machine
-      - name: Debug secrets
-        run: |
-          echo "Testing secrets..."
-          echo "SERVER_HOST is set to: ${{ secrets.SERVER_HOST }}"
-          echo "SERVER_USER is set to: ${{ secrets.SERVER_USER }}"
-          echo "SSH key length: $(echo '${{ secrets.SSH_PRIVATE_KEY }}' | wc -c)"
-        shell: bash
 
       - name: Connect to server and deploy
         uses: appleboy/ssh-action@v0.1.10
