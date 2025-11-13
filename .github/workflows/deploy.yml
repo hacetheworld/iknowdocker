@@ -1,0 +1,29 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main # Only deploy when main branch updates
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        # ✅ Gets your repo files into the workflow machine
+
+      - name: Connect to server and deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/ubuntu/mydockerproject  # your app path on the server
+            git pull origin main             # pull latest code
+            docker compose down              # stop old containers
+            docker compose build --no-cache  # rebuild images
+            docker compose up -d             # start containers again
+            docker system prune -f           # clean up old images

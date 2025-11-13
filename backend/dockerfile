@@ -1,0 +1,22 @@
+# Backend Dockerfile
+
+# Use official Node.js image
+FROM node:20
+
+# Create app directory inside container
+WORKDIR /app
+
+# Copy package files first to leverage Docker cache
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy rest of the source code
+COPY . .
+
+# Expose port (same as your backend app.listen port)
+EXPOSE 5000
+
+# Start the server
+CMD ["npm", "start"]

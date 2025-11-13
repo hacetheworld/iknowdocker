@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  # --- MongoDB ---
+  mongo:
+    image: mongo:7
+    container_name: mongo_container
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+  # --- Backend ---
+  backend:
+    build: ./backend
+    container_name: backend_container
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URI: mongodb://root:password@mongo:27017/mydatabase?authSource=admin
+
+
+  # --- Frontend ---
+  frontend:
+    build: ./frontend
+    container_name: frontend_container
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+
+# --- Volumes (for Mongo data persistence) ---
+volumes:
+  mongo_data:
+
