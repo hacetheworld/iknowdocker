@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // Replace with your actual backend URL
-const API_URL = `http://localhost:5000/api/notes`;
+const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/notes`;
 
 export const NOTE_COLORS = ["red", "blue", "yellow"];
 
